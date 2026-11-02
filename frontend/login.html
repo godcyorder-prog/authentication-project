@@ -1,0 +1,995 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Space | Forest Luxe</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --forest: #10291f;
+  --forest-light: #1b3c2d;
+  --forest-mid: #28533d;
+  --gold: #d4b56a;
+  --cream: #f4f0e5;
+  --white: #fffdf7;
+  --muted: #aab8aa;
+  --red: #d94c4c;
+  --green: #32865a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--cream);
+  background:
+    radial-gradient(circle at 15% 15%, #254a35 0, transparent 35%),
+    radial-gradient(circle at 85% 85%, #1d392b 0, transparent 35%),
+    var(--forest);
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.hidden { display: none !important; }
+
+.brand {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 28px;
+  letter-spacing: 1px;
+}
+
+.brand small {
+  display: block;
+  color: var(--muted);
+  font: 10px 'DM Sans', sans-serif;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.gold { color: var(--gold); }
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 35px 18px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 42px;
+  border: 1px solid rgba(212,181,106,.25);
+  border-radius: 22px;
+  background: rgba(9, 29, 21, .88);
+  box-shadow: 0 25px 80px rgba(0,0,0,.35);
+  backdrop-filter: blur(15px);
+}
+
+.auth-card .brand { text-align: center; }
+
+.auth-card h1 {
+  font: 600 34px 'Playfair Display', serif;
+  text-align: center;
+  margin: 30px 0 8px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+
+.field { margin: 17px 0; }
+
+.field label {
+  display: block;
+  color: #d6d9cf;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.field input, .field textarea {
+  width: 100%;
+  padding: 14px 15px;
+  color: var(--cream);
+  background: #183428;
+  border: 1px solid #365443;
+  border-radius: 9px;
+  outline: none;
+  transition: .2s;
+}
+
+.field input:focus, .field textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212,181,106,.1);
+}
+
+.field input::placeholder, .field textarea::placeholder {
+  color: #829287;
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 15px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 9px;
+  color: #17251b;
+  background: linear-gradient(110deg, #c5a65e, #ead49a);
+  font-weight: 700;
+  transition: .2s;
+}
+
+.primary-btn:hover { transform: translateY(-2px); }
+
+.switch-text {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 24px;
+}
+
+.switch-text button, .text-btn {
+  color: var(--gold);
+  border: 0;
+  background: none;
+  font-weight: 700;
+}
+
+.forgot {
+  display: block;
+  text-align: right;
+  margin-top: 8px;
+  color: var(--gold);
+  background: none;
+  border: 0;
+  font-size: 12px;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #89998e;
+  font-size: 11px;
+  margin: 23px 0;
+}
+
+.separator::before, .separator::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: #385143;
+}
+
+.social-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  background: transparent;
+  border: 1px solid #49604f;
+  border-radius: 9px;
+  color: var(--cream);
+  font-weight: 600;
+}
+
+.social-btn:hover {
+  border-color: var(--gold);
+  background: rgba(255,255,255,.04);
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 16px;
+}
+
+.terms input { accent-color: var(--gold); }
+
+/* Notifications */
+
+.notification {
+  position: fixed;
+  z-index: 1000;
+  top: 22px;
+  right: 22px;
+  width: min(360px, calc(100% - 36px));
+  display: flex;
+  gap: 13px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #512323;
+  border: 1px solid #e36b6b;
+  box-shadow: 0 12px 35px #0006;
+  animation: slideIn .3s ease;
+}
+
+.notification.success { background: #173e2a; border-color: #55bd7e; }
+.notification-icon { font-size: 23px; font-weight: bold; }
+.notification-title { font-weight: 700; margin-bottom: 4px; }
+.notification-message { color: #eee; font-size: 12px; line-height: 1.5; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(25px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Dashboard */
+
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  width: 245px;
+  flex-shrink: 0;
+  padding: 30px 20px;
+  background: rgba(7, 24, 17, .8);
+  border-right: 1px solid rgba(212,181,106,.2);
+}
+
+.sidebar .brand { margin: 5px 10px 45px; }
+
+.nav-btn {
+  width: 100%;
+  text-align: left;
+  padding: 14px;
+  margin: 4px 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #bdc9bd;
+  font-size: 13px;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  color: var(--gold);
+  background: #244332;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 13px;
+  margin-top: 35px;
+  color: #f0b2a8;
+  background: transparent;
+  border: 1px solid #70423a;
+  border-radius: 8px;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 35px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 35px;
+}
+
+.profile-circle {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--forest);
+  background: var(--gold);
+  font-weight: 700;
+}
+
+.welcome-title {
+  font: 600 clamp(28px, 4vw, 42px) 'Playfair Display', serif;
+  margin: 0 0 9px;
+}
+
+.welcome-subtitle { color: var(--muted); font-size: 13px; }
+
+.section-title {
+  font: 600 25px 'Playfair Display', serif;
+  margin: 0 0 22px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 17px;
+  margin: 28px 0;
+}
+
+.stat-card, .content-card {
+  background: #193629;
+  border: 1px solid rgba(212,181,106,.18);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.stat-card small { color: var(--muted); }
+.stat-card h2 {
+  font: 600 30px 'Playfair Display', serif;
+  color: var(--gold);
+  margin: 12px 0 0;
+}
+
+.content-card { margin-bottom: 18px; }
+
+.content-card h3 {
+  font: 600 19px 'Playfair Display', serif;
+  margin: 0 0 15px;
+}
+
+.action-btn {
+  padding: 10px 15px;
+  border: 1px solid var(--gold);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--gold);
+  margin-top: 12px;
+}
+
+.action-btn:hover { background: #34523c; }
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #385143;
+  font-size: 13px;
+}
+
+.item:last-child { border-bottom: 0; }
+
+.item button {
+  border: 0;
+  background: transparent;
+  color: #e8a19a;
+}
+
+.item input[type="checkbox"] { accent-color: var(--gold); }
+
+.profile-info p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.mobile-brand { display: none; }
+
+@media(max-width: 760px) {
+  .dashboard { display: block; }
+  .sidebar {
+    width: 100%;
+    padding: 14px;
+    border-right: 0;
+    border-bottom: 1px solid #405444;
+  }
+  .sidebar .brand {
+    margin: 5px 5px 12px;
+    font-size: 23px;
+  }
+  .nav-links {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+  }
+  .nav-btn {
+    width: auto;
+    flex-shrink: 0;
+    padding: 10px;
+    font-size: 11px;
+  }
+  .logout-btn { margin-top: 10px; }
+  .main { padding: 22px 15px; }
+  .auth-card { padding: 28px 22px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NOTIFICATION -->
+<div id="notification" class="notification hidden" role="alert">
+  <span class="notification-icon" id="notificationIcon">!</span>
+  <div>
+    <div class="notification-title" id="notificationTitle">Error</div>
+    <div class="notification-message" id="notificationMessage"></div>
+  </div>
+</div>
+
+<!-- LOGIN PAGE -->
+<section id="loginPage" class="page">
+  <div class="auth-card">
+    <div class="brand">My Space<small>YOUR PERSONAL WORLD</small></div>
+
+    <h1>Welcome</h1>
+    <p class="subtitle">Your space. Your thoughts. Your journey.</p>
+
+    <form id="loginForm">
+      <div class="field">
+        <label>Email Address</label>
+        <input id="loginEmail" type="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input id="loginPassword" type="password" placeholder="Enter your password" required>
+        <button class="forgot" type="button" onclick="forgotPassword()">Forgot password?</button>
+      </div>
+
+      <button class="primary-btn" type="submit">Sign In</button>
+    </form>
+
+    <div class="separator">OR CONTINUE WITH</div>
+
+    <button class="social-btn" onclick="socialLogin('Google')">G Continue with Google</button>
+    <button class="social-btn" onclick="socialLogin('Apple')">● Continue with Apple</button>
+    <button class="social-btn" onclick="socialLogin('Microsoft')">▦ Continue with Microsoft</button>
+
+    <p class="switch-text">
+      Don't have an account?
+      <button onclick="showPage('signupPage')">Create Account</button>
+    </p>
+  </div>
+</section>
+
+<!-- SIGN UP PAGE -->
+<section id="signupPage" class="page hidden">
+  <div class="auth-card">
+    <div class="brand">My Space<small>YOUR PERSONAL WORLD</small></div>
+
+    <h1>Create Account</h1>
+    <p class="subtitle">Create your own personal space.</p>
+
+    <form id="signupForm">
+      <div class="field">
+        <label>Full Name</label>
+        <input id="signupName" type="text" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="field">
+        <label>Email Address</label>
+        <input id="signupEmail" type="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input id="signupPassword" type="password" placeholder="Create a password" minlength="8" required>
+      </div>
+
+      <div class="field">
+        <label>Confirm Password</label>
+        <input id="confirmPassword" type="password" placeholder="Confirm your password" required>
+      </div>
+
+      <label class="terms">
+        <input id="agreeTerms" type="checkbox" required>
+        <span>I agree to the Terms and Conditions and Privacy Policy.</span>
+      </label>
+
+      <button class="primary-btn" type="submit">Create My Account</button>
+    </form>
+
+    <p class="switch-text">
+      Already have an account?
+      <button onclick="showPage('loginPage')">Login</button>
+    </p>
+  </div>
+</section>
+
+<!-- MY SPACE DASHBOARD -->
+<section id="dashboardPage" class="dashboard hidden">
+
+  <aside class="sidebar">
+    <div class="brand">My Space<small>YOUR PERSONAL WORLD</small></div>
+
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="showSection('home',this)">⌂ Home</button>
+      <button class="nav-btn" onclick="showSection('notes',this)">▤ My Notes</button>
+      <button class="nav-btn" onclick="showSection('tasks',this)">✓ My Tasks</button>
+      <button class="nav-btn" onclick="showSection('goals',this)">✧ My Goals</button>
+      <button class="nav-btn" onclick="showSection('profile',this)">◉ My Profile</button>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">↪ Logout</button>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="gold" style="font-size:11px;letter-spacing:3px;">YOUR PERSONAL SPACE</div>
+        <div style="color:var(--muted);font-size:12px;margin-top:5px;">A place to organise your life.</div>
+      </div>
+      <div class="profile-circle" id="profileInitial">U</div>
+    </div>
+
+    <!-- HOME -->
+    <div id="homeSection">
+      <h1 class="welcome-title">Welcome, <span class="gold" id="welcomeName">User</span></h1>
+      <p class="welcome-subtitle">Make today meaningful. Your personal space is ready.</p>
+
+      <div class="cards">
+        <div class="stat-card">
+          <small>My Notes</small>
+          <h2 id="noteCount">0</h2>
+        </div>
+        <div class="stat-card">
+          <small>My Tasks</small>
+          <h2 id="taskCount">0</h2>
+        </div>
+        <div class="stat-card">
+          <small>My Goals</small>
+          <h2 id="goalCount">0</h2>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h3>A little reminder</h3>
+        <p style="color:var(--muted);font-size:13px;line-height:1.8;">
+          This is your space to think, plan, create and grow.
+          Take one step at a time.
+        </p>
+      </div>
+
+      <div class="content-card">
+        <h3>Quick Access</h3>
+        <button class="action-btn" onclick="showSection('notes')">Write a Note</button>
+        <button class="action-btn" onclick="showSection('tasks')">Add a Task</button>
+        <button class="action-btn" onclick="showSection('goals')">Set a Goal</button>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div id="notesSection" class="hidden">
+      <h2 class="section-title">My Notes</h2>
+      <div class="content-card">
+        <div class="field">
+          <label>Note Title</label>
+          <input id="noteTitle" placeholder="Give your note a title">
+        </div>
+        <div class="field">
+          <label>Your Note</label>
+          <textarea id="noteText" rows="4" placeholder="Write your thoughts here..."></textarea>
+        </div>
+        <button class="primary-btn" onclick="addItem('notes')">Save Note</button>
+      </div>
+      <div class="content-card">
+        <h3>Saved Notes</h3>
+        <div id="notesList"></div>
+      </div>
+    </div>
+
+    <!-- TASKS -->
+    <div id="tasksSection" class="hidden">
+      <h2 class="section-title">My Tasks</h2>
+      <div class="content-card">
+        <div class="field">
+          <label>New Task</label>
+          <input id="taskInput" placeholder="What do you need to do?">
+        </div>
+        <button class="primary-btn" onclick="addItem('tasks')">Add Task</button>
+      </div>
+      <div class="content-card">
+        <h3>My To-Do List</h3>
+        <div id="tasksList"></div>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div id="goalsSection" class="hidden">
+      <h2 class="section-title">My Goals</h2>
+      <div class="content-card">
+        <div class="field">
+          <label>New Goal</label>
+          <input id="goalInput" placeholder="What do you want to achieve?">
+        </div>
+        <button class="primary-btn" onclick="addItem('goals')">Save Goal</button>
+      </div>
+      <div class="content-card">
+        <h3>My Personal Goals</h3>
+        <div id="goalsList"></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="profileSection" class="hidden">
+      <h2 class="section-title">My Profile</h2>
+      <div class="content-card profile-info">
+        <div class="profile-circle" id="profileInitialLarge" style="width:65px;height:65px;font-size:22px;">U</div>
+        <h3 id="profileName">User</h3>
+        <p>Email: <span id="profileEmail"></span></p>
+        <p>Your personal account on My Space.</p>
+      </div>
+    </div>
+
+  </main>
+</section>
+
+<script>
+/* BACKEND CONNECTION */
+const API = 'http://localhost:3000';
+
+/* NOTIFICATION SYSTEM */
+let notificationTimer;
+
+function notify(title, message, type = 'error') {
+  const box = document.getElementById('notification');
+
+  clearTimeout(notificationTimer);
+
+  box.className = 'notification' + (type === 'success' ? ' success' : '');
+
+  document.getElementById('notificationIcon').textContent =
+    type === 'success' ? '✓' : '!';
+
+  document.getElementById('notificationTitle').textContent = title;
+  document.getElementById('notificationMessage').textContent = message;
+
+  notificationTimer = setTimeout(() => {
+    box.classList.add('hidden');
+  }, 4000);
+}
+
+/* PAGE SWITCHING */
+function showPage(pageId) {
+  ['loginPage', 'signupPage', 'dashboardPage'].forEach(id => {
+    document.getElementById(id).classList.add('hidden');
+  });
+
+  document.getElementById(pageId).classList.remove('hidden');
+}
+
+/* API RESPONSE HELPER */
+async function getResponse(response) {
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    let message = data.message || 'Something went wrong.';
+    if (Array.isArray(message)) message = message.join(', ');
+    throw new Error(message);
+  }
+
+  return data;
+}
+
+/* SIGN UP */
+document.getElementById('signupForm').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+
+  if (password.length < 8) {
+    notify('Password Error', 'Your password must contain at least 8 characters.');
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    notify('Password Mismatch', 'Your passwords do not match. Please try again.');
+    return;
+  }
+
+  if (!document.getElementById('agreeTerms').checked) {
+    notify('Agreement Required', 'Please agree to the Terms and Conditions.');
+    return;
+  }
+
+  try {
+    const response = await fetch(API + '/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+
+    await getResponse(response);
+
+    this.reset();
+
+    notify('Account Created', 'Your account has been created successfully!', 'success');
+
+    setTimeout(() => showPage('loginPage'), 1200);
+
+  } catch (error) {
+    notify('Registration Failed', error.message);
+  }
+});
+
+/* LOGIN */
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  try {
+    const response = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await getResponse(response);
+
+    if (!data.accessToken || !data.user) {
+      throw new Error('The server returned an incomplete login response.');
+    }
+
+    sessionStorage.setItem('accessToken', data.accessToken);
+    sessionStorage.setItem('currentUser', JSON.stringify(data.user));
+
+    document.getElementById('loginForm').reset();
+
+    openDashboard(data.user);
+
+    notify('Welcome!', 'You have successfully logged in.', 'success');
+
+  } catch (error) {
+    notify('Login Failed', error.message);
+  }
+});
+
+/* OPEN PERSONALISED DASHBOARD */
+function openDashboard(user) {
+  showPage('dashboardPage');
+
+  const name = user.name || 'User';
+  const email = user.email || '';
+
+  document.getElementById('welcomeName').textContent = name;
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileEmail').textContent = email;
+
+  const initial = name.charAt(0).toUpperCase() || 'U';
+  document.getElementById('profileInitial').textContent = initial;
+  document.getElementById('profileInitialLarge').textContent = initial;
+
+  loadItems();
+  showSection('home');
+}
+
+/* DASHBOARD NAVIGATION */
+function showSection(section, button) {
+  const sections = ['home', 'notes', 'tasks', 'goals', 'profile'];
+
+  sections.forEach(name => {
+    document.getElementById(name + 'Section').classList.add('hidden');
+  });
+
+  document.getElementById(section + 'Section').classList.remove('hidden');
+
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  if (button) {
+    button.classList.add('active');
+  } else {
+    const matchingButton = [...document.querySelectorAll('.nav-btn')]
+      .find(btn => btn.getAttribute('onclick').includes("'" + section + "'"));
+    if (matchingButton) matchingButton.classList.add('active');
+  }
+
+  if (section === 'notes' || section === 'tasks' || section === 'goals') {
+    renderItems(section);
+  }
+}
+
+/* USER-SPECIFIC LOCAL STORAGE */
+function getUserKey() {
+  const user = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
+  return 'myspace_' + (user.id || user._id || user.email || 'guest');
+}
+
+function getItems(type) {
+  return JSON.parse(localStorage.getItem(getUserKey() + '_' + type) || '[]');
+}
+
+function saveItems(type, items) {
+  localStorage.setItem(getUserKey() + '_' + type, JSON.stringify(items));
+}
+
+/* ADD NOTES, TASKS AND GOALS */
+function addItem(type) {
+  let value = '';
+  let title = '';
+
+  if (type === 'notes') {
+    title = document.getElementById('noteTitle').value.trim();
+    value = document.getElementById('noteText').value.trim();
+
+    if (!title || !value) {
+      notify('Missing Information', 'Please enter both a note title and note content.');
+      return;
+    }
+  } else {
+    const inputId = type === 'tasks' ? 'taskInput' : 'goalInput';
+    value = document.getElementById(inputId).value.trim();
+
+    if (!value) {
+      notify('Empty Field', 'Please enter something before saving.');
+      return;
+    }
+  }
+
+  const items = getItems(type);
+
+  items.unshift({
+    id: Date.now(),
+    title: title,
+    text: value,
+    done: false
+  });
+
+  saveItems(type, items);
+
+  if (type === 'notes') {
+    document.getElementById('noteTitle').value = '';
+    document.getElementById('noteText').value = '';
+  } else {
+    document.getElementById(type === 'tasks' ? 'taskInput' : 'goalInput').value = '';
+  }
+
+  renderItems(type);
+  updateCounts();
+
+  notify('Saved Successfully', 'Your ' + type.slice(0, -1) + ' has been saved.', 'success');
+}
+
+/* DISPLAY SAVED ITEMS */
+function renderItems(type) {
+  const list = document.getElementById(type + 'List');
+  const items = getItems(type);
+
+  list.innerHTML = '';
+
+  if (items.length === 0) {
+    list.innerHTML = '<p style="color:#aab8aa;font-size:13px;">Nothing here yet. Add your first one!</p>';
+    return;
+  }
+
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'item';
+
+    if (type === 'notes') {
+      const content = document.createElement('div');
+      const heading = document.createElement('strong');
+      const body = document.createElement('p');
+
+      heading.textContent = item.title;
+      body.textContent = item.text;
+      body.style.color = '#aab8aa';
+      body.style.whiteSpace = 'pre-wrap';
+      body.style.margin = '6px 0 0';
+
+      content.append(heading, body);
+      row.append(content);
+    } else {
+      const label = document.createElement('label');
+      label.style.display = 'flex';
+      label.style.alignItems = 'center';
+      label.style.gap = '10px';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = item.done;
+      checkbox.addEventListener('change', () => toggleItem(type, item.id));
+
+      const text = document.createElement('span');
+      text.textContent = item.text;
+      if (item.done) text.style.textDecoration = 'line-through';
+
+      label.append(checkbox, text);
+      row.append(label);
+    }
+
+    const remove = document.createElement('button');
+    remove.textContent = 'Delete';
+    remove.addEventListener('click', () => deleteItem(type, item.id));
+    row.append(remove);
+
+    list.append(row);
+  });
+}
+
+/* COMPLETE TASK OR GOAL */
+function toggleItem(type, id) {
+  const items = getItems(type).map(item => {
+    if (item.id === id) item.done = !item.done;
+    return item;
+  });
+
+  saveItems(type, items);
+  renderItems(type);
+}
+
+/* DELETE ITEM */
+function deleteItem(type, id) {
+  const items = getItems(type).filter(item => item.id !== id);
+  saveItems(type, items);
+  renderItems(type);
+  updateCounts();
+  notify('Deleted', 'The item has been removed.', 'success');
+}
+
+/* UPDATE DASHBOARD COUNTS */
+function updateCounts() {
+  document.getElementById('noteCount').textContent = getItems('notes').length;
+  document.getElementById('taskCount').textContent = getItems('tasks').length;
+  document.getElementById('goalCount').textContent = getItems('goals').length;
+}
+
+/* LOAD USER DATA */
+function loadItems() {
+  ['notes', 'tasks', 'goals'].forEach(renderItems);
+  updateCounts();
+}
+
+/* SOCIAL LOGIN PLACEHOLDERS */
+function socialLogin(provider) {
+  notify(
+    provider + ' Login',
+    provider + ' sign-in needs provider setup before it can be used.'
+  );
+}
+
+/* FORGOT PASSWORD PLACEHOLDER */
+function forgotPassword() {
+  notify(
+    'Password Reset',
+    'Password reset is not configured yet. We can add an email reset flow next.'
+  );
+}
+
+/* LOGOUT */
+function logout() {
+  sessionStorage.removeItem('accessToken');
+  sessionStorage.removeItem('currentUser');
+
+  showPage('loginPage');
+
+  notify('Logged Out', 'You have safely logged out.', 'success');
+}
+
+/* RESTORE SESSION AFTER PAGE REFRESH */
+window.addEventListener('DOMContentLoaded', () => {
+  const token = sessionStorage.getItem('accessToken');
+  const savedUser = sessionStorage.getItem('currentUser');
+
+  if (token && savedUser) {
+    try {
+      openDashboard(JSON.parse(savedUser));
+    } catch {
+      sessionStorage.clear();
+      showPage('loginPage');
+    }
+  }
+});
+</script>
+
+</body>
+</html>
